@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Application History — LoanGuard AI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/tokens.css" />
+<link rel="stylesheet" href="/css/base.css" />
+<link rel="stylesheet" href="/css/app.css" />
+</head>
+<body>
+
+<main class="app-main">
+  <div class="app-topbar">
+    <div>
+      <h1 id="pageTitle">Application History</h1>
+      <div class="sub" id="pageSub">View all applications and their status</div>
+    </div>
+    <a href="/apply.html" class="btn btn-primary btn-sm">+ New application</a>
+  </div>
+
+  <div class="app-content">
+    <div class="table-toolbar" id="toolbar" style="display:none">
+      <input type="search" id="searchInput" placeholder="Search applicant or loan purpose…" />
+      <select id="riskFilter">
+        <option value="">All risk levels</option>
+        <option value="Low">Low</option>
+        <option value="Medium">Medium</option>
+        <option value="High">High</option>
+      </select>
+      <select id="decisionFilter">
+        <option value="">All decisions</option>
+        <option value="Approve">Approve</option>
+        <option value="Manual Review">Manual Review</option>
+        <option value="Reject">Reject</option>
+      </select>
+    </div>
+
+    <div class="card card-flush">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>#</th><th>Applicant</th><th>Loan amount</th><th>Risk level</th><th>Decision</th><th>Status</th><th>Date</th>
+          </tr>
+        </thead>
+        <tbody id="tableBody">
+          <tr><td colspan="7"><div class="skel" style="height:200px;"></div></td></tr>
+        </tbody>
+      </table>
+      <div class="pagination" id="pagination"></div>
+    </div>
+  </div>
+</main>
+
+<div id="modalRoot"></div>
+
+<script src="/js/api.js"></script>
+<script src="/js/shell.js"></script>
+<script>
+  let state = { page: 1, pageSize: 10, search: "", risk_level: "", decision: "", user: null, items: [] };
+
+  function rowHtml(a) {
+    return `
+      <tr onclick="openDetail(${a.id})">
+        <td class="muted-cell mono">#${a.id}</td>
+        <td class="name-cell">${a.full_name}</td>
+        <td class="muted-cell mono">${fmtCurrency(a.loan_amount)}</td>
+        <td><span class="badge ${riskBadgeClass(a.risk_level)}">${a.risk_level}</span></td>
+        <td><span class="badge ${decisionBadgeClass(a.recommended_decision)}">${a.recommended_decision}</span></td>
+        <td class="muted-cell">${a.application_status}</td>
+        <td class="muted-cell">${fmtDate(a.created_at)}</td>
+      </tr>`;
+  }
+
+  async function load() {
+    const tbody = document.getElementById("tableBody");
+    tbody.innerHTML = `<tr><td colspan="7"><div class="skel" style="height:200px;"></div></td></tr>`;
+
+    let items;
+    if (state.user.role === "applicant") {
+      items = await API.myApplications();
+    } else {
+      items = await API.applications({
+        page: state.page,
+        page_size: state.pageSize,
+        search: state.search,
+        risk_level: state.risk_level,
+        decision: state.decision,
+      });
+    }
+    state.items = items;
+
+    if (!items.length) {
+      tbody.innerHTML = `<tr><td colspan="7"><div class="empty-state"><h3>No applications yet</h3><p>${
+        state.user.role === "applicant" ? "Submit your first application to see it here." : "Nothing matches these filters."
+      }</p></div></td></tr>`;
+    } else {
+      tbody.innerHTML = items.map(rowHtml).join("");
+    }
+
+    renderPagination();
+
+    const openId = new URLSearchParams(window.location.search).get("open");
+    if (openId) openDetail(Number(openId));
+  }
+
+  function renderPagination() {
+    const el = document.getElementById("pagination");
+    if (state.user.role === "applicant") {
+      el.innerHTML = "";
+      return;
+    }
+    const hasNext = state.items.length === state.pageSize;
+    el.innerHTML = `
+      <button ${state.page === 1 ? "disabled" : ""} onclick="changePage(${state.page - 1})">‹</button>
+      <button class="active">${state.page}</button>
+      <button ${hasNext ? "" : "disabled"} onclick="changePage(${state.page + 1})">›</button>
+    `;
+  }
+
+  function changePage(p) {
+    if (p < 1) return;
+    state.page = p;
+    load();
+  }
+
+  async function openDetail(id) {
+    let app;
+    try {
+      app = await API.application(id);
+    } catch (e) {
+      toast("Couldn't load that application.");
+      return;
+    }
+    const root = document.getElementById("modalRoot");
+    root.innerHTML = `
+      <div class="modal-backdrop" onclick="if(event.target===this) this.remove()">
+        <div class="modal">
+          <button class="modal-close" onclick="document.querySelector('.modal-backdrop').remove()">&times;</button>
+          <div class="badge ${riskBadgeClass(app.risk_level)}" style="margin-bottom:10px;">${app.risk_level} Risk</div>
+          <h2>${app.full_name}</h2>
+          <p style="color:var(--text-muted);font-size:14px;margin-top:4px;">${app.loan_purpose} loan · Applied ${fmtDate(app.created_at)}</p>
+          <div class="detail-grid">
+            <div class="item"><div class="k">Loan amount</div><div class="v">${fmtCurrency(app.loan_amount)}</div></div>
+            <div class="item"><div class="k">Loan term</div><div class="v">${app.loan_tenure_months} months</div></div>
+            <div class="item"><div class="k">Interest rate</div><div class="v">${app.interest_rate_percent.toFixed(2)}%</div></div>
+            <div class="item"><div class="k">Estimated EMI</div><div class="v">${fmtCurrency(app.new_emi)}</div></div>
+            <div class="item"><div class="k">Monthly income</div><div class="v">${fmtCurrency(app.total_income)}</div></div>
+            <div class="item"><div class="k">Debt-to-income</div><div class="v">${app.dti_percent.toFixed(1)}%</div></div>
+            <div class="item"><div class="k">Credit score</div><div class="v">${app.credit_score}</div></div>
+            <div class="item"><div class="k">Default probability</div><div class="v">${app.default_probability_percent.toFixed(1)}%</div></div>
+          </div>
+          <div class="result-actions" style="margin-top:26px;">
+            <a href="/result.html?id=${app.id}" class="btn btn-primary btn-sm">Full result</a>
+            <a href="/api/applications/${app.id}/export.csv" class="btn btn-ghost btn-sm">Download CSV</a>
+          </div>
+        </div>
+      </div>`;
+  }
+
+  async function init() {
+    const user = await requireAuth(["applicant", "officer", "admin"]);
+    if (!user) return;
+    state.user = user;
+    mountAppShell(user, "history");
+
+    if (user.role === "applicant") {
+      document.getElementById("pageTitle").textContent = "My Applications";
+      document.getElementById("pageSub").textContent = "Every application you've submitted and its result";
+    } else {
+      document.getElementById("toolbar").style.display = "flex";
+      document.getElementById("searchInput").addEventListener("input", (e) => {
+        state.search = e.target.value;
+        state.page = 1;
+        clearTimeout(window._searchDebounce);
+        window._searchDebounce = setTimeout(load, 300);
+      });
+      document.getElementById("riskFilter").addEventListener("change", (e) => {
+        state.risk_level = e.target.value;
+        state.page = 1;
+        load();
+      });
+      document.getElementById("decisionFilter").addEventListener("change", (e) => {
+        state.decision = e.target.value;
+        state.page = 1;
+        load();
+      });
+    }
+
+    load();
+  }
+
+  init();
+</script>
+</body>
+</html>

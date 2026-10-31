@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Create an account — LoanGuard AI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/tokens.css" />
+<link rel="stylesheet" href="/css/base.css" />
+<link rel="stylesheet" href="/css/marketing.css" />
+<link rel="stylesheet" href="/css/forms.css" />
+</head>
+<body>
+
+<div class="auth-shell">
+  <div class="auth-form-side">
+    <div class="auth-box">
+      <a href="/index.html" class="pub-logo">
+        <span class="mark">LG</span>
+        <span class="word">LoanGuard AI</span>
+      </a>
+      <h1>Create your account</h1>
+      <p class="sub">Applicant accounts can submit applications and see their own risk history.</p>
+
+      <div id="alertBox"></div>
+
+      <form id="registerForm">
+        <div class="field">
+          <label for="fullName">Full name</label>
+          <input type="text" id="fullName" required autocomplete="name" />
+        </div>
+        <div class="field">
+          <label for="email">Email</label>
+          <input type="email" id="email" required autocomplete="email" />
+        </div>
+        <div class="field">
+          <label for="password">Password</label>
+          <input type="password" id="password" required minlength="6" autocomplete="new-password" />
+          <span class="hint">At least 6 characters.</span>
+        </div>
+        <button type="submit" class="btn btn-primary btn-block" id="submitBtn">Create account</button>
+      </form>
+
+      <p class="auth-switch">Already have an account? <a href="/login.html">Log in</a></p>
+    </div>
+  </div>
+  <div class="auth-aside">
+    <div class="role-pills">
+      <span class="role-pill">2-minute form</span>
+      <span class="role-pill">Instant score</span>
+    </div>
+    <div>
+      <blockquote>"Your risk score, explained in plain terms — before a lender ever sees the application."</blockquote>
+      <p class="attribution">What applicants get</p>
+    </div>
+  </div>
+</div>
+
+<script src="/js/api.js"></script>
+<script>
+  (async () => {
+    const user = await API.me();
+    if (user) window.location.href = user.role === "applicant" ? "/apply.html" : "/dashboard.html";
+  })();
+
+  const form = document.getElementById("registerForm");
+  const alertBox = document.getElementById("alertBox");
+  const submitBtn = document.getElementById("submitBtn");
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    alertBox.innerHTML = "";
+    submitBtn.disabled = true;
+    submitBtn.textContent = "Creating account…";
+    try {
+      await API.register(
+        document.getElementById("fullName").value,
+        document.getElementById("email").value,
+        document.getElementById("password").value
+      );
+      window.location.href = "/apply.html";
+    } catch (err) {
+      alertBox.innerHTML = `<div class="alert alert-error">${err.message}</div>`;
+      submitBtn.disabled = false;
+      submitBtn.textContent = "Create account";
+    }
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,1202 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Your Risk Result — LoanGuard AI</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="/css/tokens.css" />
+<link rel="stylesheet" href="/css/base.css" />
+<link rel="stylesheet" href="/css/app.css" />
+<link rel="stylesheet" href="/css/forms.css" />
+
+<style>
+.recommendation-section {
+  margin-top: 24px;
+}
+
+.recommendation-section > .card {
+  margin-bottom: 18px;
+}
+
+.recommendation-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.recommendation-header h3 {
+  margin: 0;
+}
+
+.recommendation-subtitle {
+  color: var(--muted, #777);
+  font-size: 13px;
+  margin-top: 5px;
+}
+
+.rec-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.rec-item {
+  padding: 14px;
+  border: 1px solid var(--border, #e5e7eb);
+  border-radius: 12px;
+}
+
+.rec-item h4 {
+  margin: 0 0 7px;
+  font-size: 14px;
+}
+
+.rec-item p {
+  margin: 5px 0;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.rec-item ul {
+  margin: 8px 0 0;
+  padding-left: 20px;
+}
+
+.rec-item li {
+  font-size: 13px;
+  line-height: 1.7;
+  margin-bottom: 5px;
+}
+
+.rec-badge {
+  display: inline-block;
+  padding: 4px 9px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 700;
+  margin-bottom: 8px;
+  background: rgba(100, 116, 139, 0.12);
+}
+
+.rec-badge.high {
+  color: #dc2626;
+  background: rgba(220, 38, 38, 0.10);
+}
+
+.rec-badge.medium {
+  color: #d97706;
+  background: rgba(217, 119, 6, 0.10);
+}
+
+.rec-badge.low {
+  color: #059669;
+  background: rgba(5, 150, 105, 0.10);
+}
+
+.rec-guidance {
+  padding: 18px;
+  border-radius: 14px;
+  background: rgba(59, 130, 246, 0.07);
+  border: 1px solid rgba(59, 130, 246, 0.18);
+}
+
+.rec-guidance h4 {
+  margin: 0 0 10px;
+}
+
+.rec-guidance p {
+  font-size: 14px;
+  line-height: 1.7;
+  margin: 0;
+}
+
+.reapply-number {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 32px;
+  font-weight: 700;
+  margin: 8px 0;
+}
+
+.rec-empty {
+  padding: 15px;
+  border-radius: 10px;
+  background: rgba(100, 116, 139, 0.07);
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.rec-disclaimer {
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--muted, #777);
+  margin-top: 12px;
+}
+
+@media (max-width: 700px) {
+  .recommendation-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .reapply-number {
+    font-size: 27px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<main class="app-main">
+
+  <div class="app-topbar">
+    <div>
+      <h1>Your risk result</h1>
+      <div class="sub" id="topSub">Application summary</div>
+    </div>
+
+    <a href="/apply.html" class="btn btn-ghost btn-sm">
+      New application
+    </a>
+  </div>
+
+  <div class="app-content" id="content">
+
+    <!-- EXISTING RESULT SECTION -->
+
+    <div class="result-grid" id="resultGrid" style="display:none">
+
+      <div>
+
+        <div class="gauge-card">
+
+          <div class="k">Loan risk score</div>
+
+          <div id="gauge" style="display:flex;justify-content:center;"></div>
+
+          <div class="gauge-value" id="gaugeValue">—</div>
+
+          <div class="gauge-sub" id="gaugeSub">
+            Probability of default
+          </div>
+
+          <div id="decisionBanner"></div>
+
+        </div>
+
+        <div class="result-actions" style="margin-top:18px;">
+
+          <a href="#" id="downloadBtn" class="btn btn-ghost btn-block">
+            Download report (CSV)
+          </a>
+
+        </div>
+
+      </div>
+
+      <div class="result-side">
+
+        <div class="card">
+
+          <div class="panel-title">
+            <h3>Application summary</h3>
+          </div>
+
+          <div class="summary-list" id="summaryList"></div>
+
+        </div>
+
+        <div class="card">
+
+          <div class="panel-title">
+            <h3>What shaped this result</h3>
+          </div>
+
+          <div class="factor-list" id="factorList"></div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- RECOMMENDATION SECTION -->
+
+    <div id="recommendationSection"
+         class="recommendation-section"
+         style="display:none;">
+
+      <div class="card">
+
+        <div class="recommendation-header">
+          <div>
+            <h3>Why did you get this result?</h3>
+            <div class="recommendation-subtitle">
+              Understand the financial factors influencing your assessment.
+            </div>
+          </div>
+        </div>
+
+        <div id="riskExplanations" class="rec-list"></div>
+
+      </div>
+
+
+      <div class="card">
+
+        <div class="recommendation-header">
+          <div>
+            <h3>Identified risk factors</h3>
+            <div class="recommendation-subtitle">
+              Financial areas that may need attention.
+            </div>
+          </div>
+        </div>
+
+        <div id="riskFactors" class="rec-list"></div>
+
+      </div>
+
+
+      <div class="card">
+
+        <div class="recommendation-header">
+          <div>
+            <h3>Personalized improvement suggestions</h3>
+            <div class="recommendation-subtitle">
+              Practical actions to improve your financial profile.
+            </div>
+          </div>
+        </div>
+
+        <div id="suggestions" class="rec-list"></div>
+
+      </div>
+
+
+      <div class="card">
+
+        <div class="recommendation-header">
+          <div>
+            <h3 id="categoryTitle">Applicant-specific guidance</h3>
+            <div class="recommendation-subtitle">
+              Suggestions based on your applicant category.
+            </div>
+          </div>
+        </div>
+
+        <div id="categorySuggestions" class="rec-list"></div>
+
+      </div>
+
+
+      <div class="card">
+
+        <div class="recommendation-header">
+          <div>
+            <h3>Financial improvement plan</h3>
+            <div class="recommendation-subtitle">
+              Steps to work on before your next application.
+            </div>
+          </div>
+        </div>
+
+        <div id="improvementPlan" class="rec-list"></div>
+
+      </div>
+
+
+      <div class="card">
+
+        <div class="recommendation-header">
+          <div>
+            <h3>Reapplication guidance</h3>
+            <div class="recommendation-subtitle">
+              Understand when to consider applying again.
+            </div>
+          </div>
+        </div>
+
+        <div id="reapplicationGuidance" class="rec-guidance"></div>
+
+      </div>
+
+
+      <div class="card">
+
+        <div class="recommendation-header">
+          <div>
+            <h3>Required document checklist</h3>
+            <div class="recommendation-subtitle">
+              Documents to prepare for your loan application.
+            </div>
+          </div>
+        </div>
+
+        <div id="documentChecklist" class="rec-list"></div>
+
+      </div>
+
+
+      <div class="card">
+
+        <div class="rec-disclaimer" id="recommendationDisclaimer"></div>
+
+      </div>
+
+    </div>
+
+
+    <!-- LOADING -->
+
+    <div id="loadingState">
+
+      <div class="skel"
+           style="height:280px;border-radius:22px;">
+      </div>
+
+    </div>
+
+  </div>
+
+</main>
+
+
+<script src="/js/api.js"></script>
+<script src="/js/shell.js"></script>
+<script src="/js/gauge.js"></script>
+
+<script>
+
+/* --------------------------------------------------
+   DECISION INFORMATION
+-------------------------------------------------- */
+
+const DECISION_META = {
+
+  Approve: {
+    cls: "decision-approve",
+    title: "Low predicted default risk",
+    body: "The model indicates a low default-risk profile. Final loan approval remains subject to lender verification and underwriting."
+  },
+
+  "Manual Review": {
+    cls: "decision-review",
+    title: "Needs a closer look",
+    body: "The model identifies a moderate-risk profile. Further manual underwriting review is recommended."
+  },
+
+  Reject: {
+    cls: "decision-reject",
+    title: "High predicted default risk",
+    body: "The application currently falls outside the model's approval criteria. Review the improvement guidance below."
+  }
+
+};
+
+
+/* --------------------------------------------------
+   SAFE HTML HELPERS
+-------------------------------------------------- */
+
+function escapeHTML(value) {
+
+  return String(value ?? "").replace(/[&<>"']/g, char => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#39;"
+  })[char]);
+
+}
+
+
+function safeNumber(value, fallback = 0) {
+
+  const number = Number(value);
+
+  return Number.isFinite(number) ? number : fallback;
+
+}
+
+
+function formatValue(value) {
+
+  if (value === null || value === undefined || value === "") {
+    return "Not available";
+  }
+
+  if (typeof value === "number" && !Number.isFinite(value)) {
+    return "Not available";
+  }
+
+  return escapeHTML(value);
+
+}
+
+
+function summaryRow(key, value) {
+
+  return `
+    <div class="row">
+      <span class="k">${escapeHTML(key)}</span>
+      <span class="v">${formatValue(value)}</span>
+    </div>
+  `;
+
+}
+
+
+/* --------------------------------------------------
+   EXISTING RISK FACTOR GAUGE
+-------------------------------------------------- */
+
+function factorRow(label, pct) {
+
+  pct = Math.min(100, Math.max(0, safeNumber(pct)));
+
+  const width = Math.min(100, Math.max(4, pct));
+
+  return `
+    <div class="factor">
+
+      <span class="flabel">${escapeHTML(label)}</span>
+
+      <span class="bar-track">
+        <span class="bar-fill"
+              style="width:${width}%;background:${factorBarColor(pct)}">
+        </span>
+      </span>
+
+      <span class="fval mono">${pct.toFixed(0)}%</span>
+
+    </div>
+  `;
+
+}
+
+
+/* --------------------------------------------------
+   GENERAL RECOMMENDATION RENDERING
+-------------------------------------------------- */
+
+function renderTextItems(containerId, items, emptyMessage) {
+
+  const container = document.getElementById(containerId);
+
+  if (!Array.isArray(items) || items.length === 0) {
+
+    container.innerHTML = `
+      <div class="rec-empty">
+        ${escapeHTML(emptyMessage)}
+      </div>
+    `;
+
+    return;
+
+  }
+
+  container.innerHTML = items.map(item => {
+
+    let title = "";
+    let description = "";
+
+    if (typeof item === "string" || typeof item === "number") {
+
+      description = String(item);
+
+    } else if (item && typeof item === "object") {
+
+      title =
+        item.title ||
+        item.factor ||
+        item.name ||
+        item.step ||
+        item.action ||
+        item.document ||
+        "";
+
+      description =
+        item.explanation ||
+        item.description ||
+        item.recommendation ||
+        item.details ||
+        item.action ||
+        "";
+
+      if (!description && title) {
+        description = title;
+      }
+
+    }
+
+    if (!title && !description) {
+      return "";
+    }
+
+    return `
+      <div class="rec-item">
+
+        ${title ? `<h4>${escapeHTML(title)}</h4>` : ""}
+
+        ${description && description !== title
+          ? `<p>${escapeHTML(description)}</p>`
+          : ""}
+
+      </div>
+    `;
+
+  }).join("");
+
+  if (!container.innerHTML.trim()) {
+
+    container.innerHTML = `
+      <div class="rec-empty">
+        ${escapeHTML(emptyMessage)}
+      </div>
+    `;
+
+  }
+
+}
+
+
+/* --------------------------------------------------
+   RISK FACTORS
+-------------------------------------------------- */
+
+function renderRiskFactors(factors) {
+
+  const container = document.getElementById("riskFactors");
+
+  if (!Array.isArray(factors) || factors.length === 0) {
+
+    container.innerHTML = `
+      <div class="rec-empty">
+        No major risk factors were identified by the current recommendation rules.
+      </div>
+    `;
+
+    return;
+
+  }
+
+  container.innerHTML = factors.map(factor => {
+
+    const severity = String(
+      factor.severity || "Medium"
+    ).toLowerCase();
+
+    const badgeClass = ["high", "medium", "low"].includes(severity)
+      ? severity
+      : "medium";
+
+    return `
+
+      <div class="rec-item">
+
+        <span class="rec-badge ${badgeClass}">
+          ${escapeHTML(factor.severity || "Not specified")} Risk
+        </span>
+
+        <h4>${escapeHTML(factor.factor || "Financial factor")}</h4>
+
+        ${factor.value !== undefined
+          ? `<p><strong>Observed value:</strong> ${escapeHTML(factor.value)}</p>`
+          : ""}
+
+        ${factor.explanation
+          ? `<p>${escapeHTML(factor.explanation)}</p>`
+          : ""}
+
+        ${factor.action
+          ? `<p><strong>Recommended action:</strong> ${escapeHTML(factor.action)}</p>`
+          : ""}
+
+      </div>
+
+    `;
+
+  }).join("");
+
+}
+
+
+/* --------------------------------------------------
+   IMPROVEMENT PLAN - FIXED
+-------------------------------------------------- */
+
+function renderImprovementPlan(plan) {
+
+  const container = document.getElementById("improvementPlan");
+
+  if (!Array.isArray(plan) || plan.length === 0) {
+
+    container.innerHTML = `
+      <div class="rec-empty">
+        No additional improvement plan is available.
+        Continue maintaining your financial profile.
+      </div>
+    `;
+
+    return;
+
+  }
+
+  container.innerHTML = plan.map((item, index) => {
+
+    let title = "";
+    let problem = "";
+    let description = "";
+    let priority = "Medium";
+
+    if (typeof item === "string") {
+
+      description = item;
+
+    } else if (item && typeof item === "object") {
+
+      title =
+        item.area ||
+        item.title ||
+        item.factor ||
+        item.step ||
+        `Step ${index + 1}`;
+
+      problem =
+        item.problem ||
+        item.explanation ||
+        "";
+
+      description =
+        item.recommended_action ||
+        item.action ||
+        item.description ||
+        item.recommendation ||
+        item.details ||
+        "";
+
+      priority = item.priority || "Medium";
+
+    }
+
+    return `
+
+      <div class="rec-item">
+
+        <span class="rec-badge">
+          ${escapeHTML(priority)} Priority
+        </span>
+
+        <h4>Step ${index + 1}: ${escapeHTML(title)}</h4>
+
+        ${problem
+          ? `<p><strong>What needs attention:</strong> ${escapeHTML(problem)}</p>`
+          : ""}
+
+        ${description
+          ? `<p><strong>Recommended action:</strong> ${escapeHTML(description)}</p>`
+          : ""}
+
+      </div>
+
+    `;
+
+  }).join("");
+
+}
+
+
+/* --------------------------------------------------
+   DOCUMENT CHECKLIST
+-------------------------------------------------- */
+
+function renderDocumentChecklist(documents) {
+
+  const container = document.getElementById("documentChecklist");
+
+  if (!Array.isArray(documents) || documents.length === 0) {
+
+    container.innerHTML = `
+      <div class="rec-empty">
+        No document checklist is currently available.
+      </div>
+    `;
+
+    return;
+
+  }
+
+  container.innerHTML = `
+
+    <div class="rec-list">
+
+      ${documents.map(document => {
+
+        let title = "";
+
+        if (typeof document === "string") {
+          title = document;
+        } else if (document && typeof document === "object") {
+          title =
+            document.document ||
+            document.name ||
+            document.title ||
+            document.description ||
+            "";
+        }
+
+        if (!title) return "";
+
+        return `
+
+          <div class="rec-item">
+
+            <label style="display:flex;align-items:center;gap:10px;">
+
+              <input type="checkbox">
+
+              <span>${escapeHTML(title)}</span>
+
+            </label>
+
+          </div>
+
+        `;
+
+      }).join("")}
+
+    </div>
+
+  `;
+
+}
+
+
+/* --------------------------------------------------
+   REAPPLICATION GUIDANCE
+-------------------------------------------------- */
+
+function renderReapplicationGuidance(recommendations) {
+
+  const container = document.getElementById("reapplicationGuidance");
+
+  const months = recommendations.estimated_reapplication_months;
+
+  const guidance = recommendations.reapplication_guidance;
+
+  let periodHTML = "";
+
+  if (
+    months !== null &&
+    months !== undefined &&
+    Number.isFinite(Number(months)) &&
+    Number(months) > 0
+  ) {
+
+    periodHTML = `
+
+      <div class="reapply-number">
+        ${escapeHTML(months)} months
+      </div>
+
+      <p>
+        Estimated period before considering another application.
+      </p>
+
+    `;
+
+  } else if (recommendations.recommended_decision === "Approve") {
+
+    periodHTML = `
+      <p>
+        No waiting period is suggested by the recommendation engine.
+        Proceed only after confirming the lender's requirements.
+      </p>
+    `;
+
+  }
+
+  container.innerHTML = `
+
+    ${periodHTML}
+
+    ${guidance
+      ? `<p style="margin-top:12px;">${escapeHTML(guidance)}</p>`
+      : ""}
+
+    <p style="margin-top:12px;font-size:12px;">
+      This is a rule-based estimate, not a guarantee of future loan approval.
+      Reapply when the relevant financial issues have improved.
+    </p>
+
+  `;
+
+}
+
+
+/* --------------------------------------------------
+   COMPLETE RECOMMENDATION DISPLAY
+-------------------------------------------------- */
+
+function renderRecommendations(recommendations) {
+
+  const section = document.getElementById("recommendationSection");
+
+  section.style.display = "block";
+
+  if (!recommendations || typeof recommendations !== "object") {
+
+    section.innerHTML = `
+
+      <div class="card">
+
+        <h3>Recommendations unavailable</h3>
+
+        <p>
+          Recommendation details are not available for this application.
+          Please contact the administrator if this issue continues.
+        </p>
+
+      </div>
+
+    `;
+
+    return;
+
+  }
+
+  const applicantType =
+    recommendations.applicant_type || "Individual";
+
+  document.getElementById("categoryTitle").textContent =
+    `${applicantType} applicant guidance`;
+
+  renderTextItems(
+    "riskExplanations",
+    recommendations.explanations,
+    "No additional explanations are available."
+  );
+
+  renderRiskFactors(
+    recommendations.risk_factors
+  );
+
+  renderTextItems(
+    "suggestions",
+    recommendations.suggestions,
+    "Continue maintaining your current financial habits."
+  );
+
+  renderTextItems(
+    "categorySuggestions",
+    recommendations.category_suggestions,
+    "No category-specific suggestions are available."
+  );
+
+  renderImprovementPlan(
+    recommendations.improvement_plan
+  );
+
+  renderReapplicationGuidance(
+    recommendations
+  );
+
+  renderDocumentChecklist(
+    recommendations.document_checklist
+  );
+
+  document.getElementById("recommendationDisclaimer").textContent =
+    recommendations.disclaimer ||
+    "These recommendations are informational guidance generated from the submitted application details. They do not guarantee loan approval. Final decisions depend on lender verification and underwriting.";
+
+}
+
+
+/* --------------------------------------------------
+   LOAD APPLICATION
+-------------------------------------------------- */
+
+async function init() {
+
+  const user = await requireAuth(["applicant", "officer", "admin"]);
+
+  if (!user) return;
+
+  mountAppShell(user, "apply");
+
+  const params = new URLSearchParams(window.location.search);
+
+  const id =
+    params.get("id") ||
+    sessionStorage.getItem("lastResultId");
+
+  const loadingState = document.getElementById("loadingState");
+
+  if (!id) {
+
+    loadingState.innerHTML = `
+
+      <div class="empty-state">
+
+        <h3>No application selected</h3>
+
+        <p>
+          Submit a new application to see your risk result.
+        </p>
+
+      </div>
+
+    `;
+
+    return;
+
+  }
+
+
+  let app;
+
+  try {
+
+    app = await API.application(id);
+
+  } catch (error) {
+
+    loadingState.innerHTML = `
+
+      <div class="empty-state">
+
+        <h3>Couldn't load this application</h3>
+
+        <p>${escapeHTML(error.message || "Please try again.")}</p>
+
+      </div>
+
+    `;
+
+    return;
+
+  }
+
+
+  if (!app) {
+
+    loadingState.innerHTML = `
+      <div class="empty-state">
+        <h3>Application not found</h3>
+      </div>
+    `;
+
+    return;
+
+  }
+
+
+  loadingState.style.display = "none";
+
+  document.getElementById("resultGrid").style.display = "grid";
+
+
+  /* APPLICATION HEADER */
+
+  document.getElementById("topSub").textContent =
+
+    `${app.full_name} · ${app.loan_purpose} loan · Submitted ${fmtDate(app.created_at)}`;
+
+
+  /* EXISTING GAUGE */
+
+  const probability = safeNumber(app.default_probability_percent);
+
+  renderGauge(
+    document.getElementById("gauge"),
+    probability
+  );
+
+  document.getElementById("gaugeValue").textContent =
+    probability.toFixed(1) + "%";
+
+  document.getElementById("gaugeSub").textContent =
+    `${app.risk_level || "Unknown"} Risk`;
+
+
+  /* DECISION BANNER */
+
+  const meta =
+    DECISION_META[app.recommended_decision] ||
+    DECISION_META["Manual Review"];
+
+  document.getElementById("decisionBanner").innerHTML = `
+
+    <div class="decision-banner ${meta.cls}">
+
+      <span class="icon">
+        ${app.recommended_decision === "Approve"
+          ? "✓"
+          : app.recommended_decision === "Reject"
+            ? "✕"
+            : "!"}
+      </span>
+
+      <div>
+
+        <h4>${escapeHTML(meta.title)}</h4>
+
+        <p>${escapeHTML(meta.body)}</p>
+
+      </div>
+
+    </div>
+
+  `;
+
+
+  /* APPLICATION SUMMARY */
+
+  document.getElementById("summaryList").innerHTML = [
+
+    summaryRow(
+      "Applicant type",
+      app.applicant_type || "Individual"
+    ),
+
+    summaryRow(
+      "Loan amount",
+      fmtCurrency(safeNumber(app.loan_amount))
+    ),
+
+    summaryRow(
+      "Loan term",
+      `${app.loan_tenure_months} months`
+    ),
+
+    summaryRow(
+      "Interest rate (est.)",
+      `${safeNumber(app.interest_rate_percent).toFixed(2)}%`
+    ),
+
+    summaryRow(
+      "Estimated EMI",
+      fmtCurrency(safeNumber(app.new_emi))
+    ),
+
+    summaryRow(
+      "Monthly income",
+      fmtCurrency(safeNumber(app.total_income))
+    ),
+
+    summaryRow(
+      "Debt-to-income",
+      `${safeNumber(app.dti_percent).toFixed(1)}%`
+    ),
+
+    summaryRow(
+      "Credit score",
+      app.credit_score
+    )
+
+  ].join("");
+
+
+  /* EXISTING FACTOR ANALYSIS */
+
+  const factors = [
+
+    [
+      "Debt-to-income ratio",
+      Math.min(safeNumber(app.dti_percent), 100)
+    ],
+
+    [
+      "Credit utilization",
+      safeNumber(app.credit_utilization_percent)
+    ],
+
+    [
+      "Credit score band",
+      Math.max(
+        0,
+        Math.min(
+          100,
+          (900 - safeNumber(app.credit_score)) / 6
+        )
+      )
+    ],
+
+    [
+      "Repayment consistency",
+      Math.max(
+        0,
+        100 - safeNumber(app.repayment_consistency_score)
+      )
+    ],
+
+    [
+      "Loan-to-income ratio",
+      Math.min(
+        safeNumber(app.loan_to_income_ratio) * 100,
+        100
+      )
+    ]
+
+  ];
+
+
+  document.getElementById("factorList").innerHTML =
+
+    factors.map(([label, value]) =>
+
+      factorRow(label, value)
+
+    ).join("");
+
+
+  /* CSV DOWNLOAD */
+
+  document.getElementById("downloadBtn").href =
+
+    `/api/applications/${encodeURIComponent(app.id)}/export.csv`;
+
+
+  /* RECOMMENDATION MODULE */
+
+  renderRecommendations(app.recommendations);
+
+}
+
+
+/* --------------------------------------------------
+   START
+-------------------------------------------------- */
+
+init().catch(error => {
+
+  console.error("Result page error:", error);
+
+  document.getElementById("loadingState").innerHTML = `
+
+    <div class="empty-state">
+
+      <h3>Something went wrong</h3>
+
+      <p>Unable to display your application result.</p>
+
+    </div>
+
+  `;
+
+});
+
+</script>
+
+</body>
+</html>

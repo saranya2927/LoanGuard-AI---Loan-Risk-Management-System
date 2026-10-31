@@ -1,0 +1,119 @@
+:root {
+  /* -- Color: base -- */
+  --ink: #0a0e1a;
+  --ink-soft: #131a2c;
+  --steel: #33415c;
+  --steel-soft: #5b6a89;
+  --line: #e2e6f0;
+  --line-soft: #edf0f7;
+  --surface: #ffffff;
+  --surface-alt: #f4f6fb;
+  --surface-sunk: #eceff8;
+  --text: #0f1526;
+  --text-muted: #55617c;
+  --text-faint: #8792ab;
+
+  /* -- Color: brand -- */
+  --indigo: #4b3fd1;
+  --indigo-dark: #372ea6;
+  --indigo-tint: #eeecfb;
+
+  /* -- Color: risk semantics -- */
+  --risk-low: #1d9a6c;
+  --risk-low-tint: #e4f5ee;
+  --risk-medium: #c9871b;
+  --risk-medium-tint: #faf1de;
+  --risk-high: #cf4343;
+  --risk-high-tint: #fbe9e9;
+
+  /* -- Type -- */
+  --font-display: "Space Grotesk", "IBM Plex Sans", sans-serif;
+  --font-body: "IBM Plex Sans", -apple-system, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+
+  /* -- Scale -- */
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --radius-lg: 22px;
+  --shadow-elevated: 0 20px 48px -20px rgba(10, 14, 26, 0.28);
+  --shadow-soft: 0 2px 10px -4px rgba(10, 14, 26, 0.12);
+
+  --sidebar-w: 248px;
+  --topbar-h: 72px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  color: var(--text);
+  background: var(--surface);
+  -webkit-font-smoothing: antialiased;
+  line-height: 1.5;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+  margin: 0;
+  letter-spacing: -0.01em;
+  font-weight: 600;
+}
+
+p {
+  margin: 0;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+button, input, select, textarea {
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+}
+
+.mono {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+.container {
+  width: 100%;
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 0 28px;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+}
+
+:focus-visible {
+  outline: 2px solid var(--indigo);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+}

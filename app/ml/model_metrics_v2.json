@@ -1,0 +1,141 @@
+{
+    "model_name": "GradientBoosting (tuned)",
+    "best_params": {
+        "model__learning_rate": 0.08,
+        "model__max_depth": 2,
+        "model__min_samples_leaf": 25,
+        "model__n_estimators": 200,
+        "model__subsample": 0.85
+    },
+    "train_accuracy": 0.94,
+    "accuracy": 0.9116666666666666,
+    "precision_default": 0.8865248226950354,
+    "recall_default": 0.8660508083140878,
+    "f1": 0.8761682242990654,
+    "roc_auc": 0.9740026677827595,
+    "overfit_gap": 0.02833333333333332,
+    "cv_accuracy_mean": 0.9196666666666667,
+    "cv_accuracy_std": 0.01013245610238042,
+    "cv_precision_default_mean": 0.9016215991872736,
+    "cv_recall_default_mean": 0.8729257548541615,
+    "cv_f1_default_mean": 0.8869434364361976,
+    "cv_roc_auc_mean": 0.9756200303860902,
+    "confusion_matrix": [
+        [
+            719,
+            48
+        ],
+        [
+            58,
+            375
+        ]
+    ],
+    "classification_report": {
+        "No Default": {
+            "precision": 0.9253539253539254,
+            "recall": 0.9374185136897001,
+            "f1-score": 0.9313471502590673,
+            "support": 767.0
+        },
+        "Default": {
+            "precision": 0.8865248226950354,
+            "recall": 0.8660508083140878,
+            "f1-score": 0.8761682242990654,
+            "support": 433.0
+        },
+        "accuracy": 0.9116666666666666,
+        "macro avg": {
+            "precision": 0.9059393740244803,
+            "recall": 0.9017346610018939,
+            "f1-score": 0.9037576872790664,
+            "support": 1200.0
+        },
+        "weighted avg": {
+            "precision": 0.9113430908111759,
+            "recall": 0.9116666666666666,
+            "f1-score": 0.9114367544751667,
+            "support": 1200.0
+        }
+    },
+    "n_train": 4800,
+    "n_test": 1200,
+    "n_total": 6000,
+    "dropped_redundant_columns": [
+        "Loan_Tenure_Years",
+        "Assets",
+        "Total_Income",
+        "Total_Monthly_Obligation",
+        "EMI_to_Income_Percent",
+        "Payment_Burden",
+        "Liabilities"
+    ],
+    "features": [
+        "Age",
+        "Employment_Years",
+        "Monthly_Income",
+        "Other_Monthly_Income",
+        "Credit_Score",
+        "Credit_History_Years",
+        "Credit_Accounts",
+        "Credit_Utilization_Percent",
+        "Previous_Loans",
+        "Late_Payments",
+        "Previous_Defaults",
+        "Loan_Amount",
+        "Loan_Tenure_Months",
+        "Interest_Rate_Percent",
+        "Existing_EMI",
+        "New_EMI",
+        "DTI_Percent",
+        "Net_Worth",
+        "Bank_Balance",
+        "Income_Stability_Score",
+        "Repayment_Consistency_Score",
+        "Loan_to_Income_Ratio",
+        "NetWorth_to_Loan_Ratio",
+        "Gender",
+        "Marital_Status",
+        "Education",
+        "Employment_Type",
+        "Loan_Purpose",
+        "Credit_Utilization_Category"
+    ],
+    "numeric_features": [
+        "Age",
+        "Employment_Years",
+        "Monthly_Income",
+        "Other_Monthly_Income",
+        "Credit_Score",
+        "Credit_History_Years",
+        "Credit_Accounts",
+        "Credit_Utilization_Percent",
+        "Previous_Loans",
+        "Late_Payments",
+        "Previous_Defaults",
+        "Loan_Amount",
+        "Loan_Tenure_Months",
+        "Interest_Rate_Percent",
+        "Existing_EMI",
+        "New_EMI",
+        "DTI_Percent",
+        "Net_Worth",
+        "Bank_Balance",
+        "Income_Stability_Score",
+        "Repayment_Consistency_Score",
+        "Loan_to_Income_Ratio",
+        "NetWorth_to_Loan_Ratio"
+    ],
+    "categorical_features": [
+        "Gender",
+        "Marital_Status",
+        "Education",
+        "Employment_Type",
+        "Loan_Purpose",
+        "Credit_Utilization_Category"
+    ],
+    "class_balance": {
+        "no_default": 3836,
+        "default": 2164
+    },
+    "dataset_version": "v2 (regenerated, 6000 rows, Previous_Defaults carries real signal)"
+}

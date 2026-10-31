@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Log in — LoanGuard AI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/tokens.css" />
+<link rel="stylesheet" href="/css/base.css" />
+<link rel="stylesheet" href="/css/marketing.css" />
+<link rel="stylesheet" href="/css/forms.css" />
+</head>
+<body>
+
+<div class="auth-shell">
+  <div class="auth-form-side">
+    <div class="auth-box">
+      <a href="/index.html" class="pub-logo">
+        <span class="mark">LG</span>
+        <span class="word">LoanGuard AI</span>
+      </a>
+      <h1>Welcome back</h1>
+      <p class="sub">Log in to check your risk score or review the portfolio.</p>
+
+      <div id="alertBox"></div>
+
+      <form id="loginForm">
+        <div class="field">
+          <label for="email">Email</label>
+          <input type="email" id="email" required autocomplete="email" />
+        </div>
+        <div class="field">
+          <label for="password">Password</label>
+          <input type="password" id="password" required autocomplete="current-password" />
+        </div>
+        <button type="submit" class="btn btn-primary btn-block" id="submitBtn">Log in</button>
+      </form>
+
+      <p class="auth-switch">New here? <a href="/register.html">Create an applicant account</a></p>
+
+      
+    </div>
+  </div>
+  <div class="auth-aside">
+    <div class="role-pills">
+      <span class="role-pill">Applicant</span>
+      <span class="role-pill">Loan Officer</span>
+      <span class="role-pill">Admin</span>
+    </div>
+    <div>
+      <blockquote>"The score arrives with its reasoning attached — DTI, credit utilization, repayment history — not just a verdict."</blockquote>
+      <p class="attribution">How LoanGuard AI explains every decision</p>
+    </div>
+  </div>
+</div>
+
+<script src="/js/api.js"></script>
+<script>
+ 
+
+  (async () => {
+    const user = await API.me();
+    if (user) window.location.href = user.role === "applicant" ? "/apply.html" : "/dashboard.html";
+  })();
+
+  const form = document.getElementById("loginForm");
+  const alertBox = document.getElementById("alertBox");
+  const submitBtn = document.getElementById("submitBtn");
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    alertBox.innerHTML = "";
+    submitBtn.disabled = true;
+    submitBtn.textContent = "Logging in…";
+    try {
+      const user = await API.login(document.getElementById("email").value, document.getElementById("password").value);
+      window.location.href = user.role === "applicant" ? "/apply.html" : "/dashboard.html";
+    } catch (err) {
+      alertBox.innerHTML = `<div class="alert alert-error">${err.message}</div>`;
+      submitBtn.disabled = false;
+      submitBtn.textContent = "Log in";
+    }
+  });
+</script>
+</body>
+</html>

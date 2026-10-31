@@ -1,0 +1,919 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>New Application — LoanGuard AI</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="/css/tokens.css" />
+<link rel="stylesheet" href="/css/base.css" />
+<link rel="stylesheet" href="/css/app.css" />
+<link rel="stylesheet" href="/css/forms.css" />
+</head>
+
+<body>
+
+<main class="app-main">
+
+  <div class="app-topbar">
+    <div>
+      <h1>New Application</h1>
+      <div class="sub">
+        Please provide accurate information for the most reliable risk assessment.
+      </div>
+    </div>
+  </div>
+
+  <div class="app-content" style="max-width:900px;">
+
+    <div id="alertBox"></div>
+
+    <div class="wizard">
+
+      <div class="wizard-steps" id="wizardSteps"></div>
+
+      <div class="wizard-panel">
+
+        <form id="applyForm">
+
+          <!-- =========================
+               PERSONAL INFORMATION
+          ========================== -->
+
+          <div class="wizard-page" data-page="personal">
+
+            <h2>Personal information</h2>
+
+            <p class="step-hint">
+              Tell us a little about yourself.
+            </p>
+
+            <div class="field">
+              <label for="applicant_type">Applicant type</label>
+
+              <select id="applicant_type" required>
+                <option value="">Select applicant type</option>
+                <option value="student">🎓 Student</option>
+                <option value="startup">🚀 Startup</option>
+                <option value="investor">💼 Investor</option>
+                <option value="individual">👤 Individual</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label for="full_name">Full name</label>
+              <input type="text" id="full_name" required />
+            </div>
+
+            <div class="field-row">
+
+              <div class="field">
+                <label for="age">Age</label>
+                <input
+                  type="number"
+                  id="age"
+                  min="18"
+                  max="100"
+                  required
+                />
+              </div>
+
+              <div class="field">
+                <label for="gender">Gender</label>
+
+                <select id="gender" required>
+                  <option value="">Select</option>
+                  <option>Male</option>
+                  <option>Female</option>
+                  <option>Other</option>
+                </select>
+              </div>
+
+            </div>
+
+            <div class="field-row">
+
+              <div class="field">
+                <label for="marital_status">Marital status</label>
+
+                <select id="marital_status" required>
+                  <option value="">Select</option>
+                  <option>Single</option>
+                  <option>Married</option>
+                  <option>Other</option>
+                </select>
+              </div>
+
+              <div class="field">
+                <label for="education">Education</label>
+
+                <select id="education" required>
+                  <option value="">Select</option>
+                  <option>High School</option>
+                  <option>Diploma</option>
+                  <option>Bachelor</option>
+                  <option>Master</option>
+                  <option>Professional</option>
+                </select>
+              </div>
+
+            </div>
+
+          </div>
+
+
+          <!-- =========================
+               STUDENT DETAILS
+          ========================== -->
+
+          <div class="wizard-page" data-page="student" hidden>
+
+            <h2>Student details</h2>
+
+            <p class="step-hint">
+              Provide details about your education and student loan requirement.
+            </p>
+
+            <div class="field">
+              <label for="student_institution_name">
+                Institution / College name
+              </label>
+
+              <input
+                type="text"
+                id="student_institution_name"
+                required
+              />
+            </div>
+
+            <div class="field">
+              <label for="student_course">Course / Program</label>
+
+              <input
+                type="text"
+                id="student_course"
+                required
+              />
+            </div>
+
+            <div class="field-row">
+
+              <div class="field">
+                <label for="student_year_of_study">
+                  Current year of study
+                </label>
+
+                <input
+                  type="number"
+                  id="student_year_of_study"
+                  min="1"
+                  max="10"
+                  required
+                />
+              </div>
+
+              <div class="field">
+                <label for="student_expected_graduation">
+                  Expected graduation year
+                </label>
+
+                <input
+                  type="number"
+                  id="student_expected_graduation"
+                  min="2020"
+                  max="2100"
+                  required
+                />
+              </div>
+
+            </div>
+
+            <div class="field">
+              <label for="student_education_loan_requirement">
+                Education loan requirement
+              </label>
+
+              <select
+                id="student_education_loan_requirement"
+                required
+              >
+                <option value="">Select</option>
+                <option>Tuition Fees</option>
+                <option>Hostel / Accommodation</option>
+                <option>Books & Equipment</option>
+                <option>Study Abroad</option>
+                <option>Other Education Expenses</option>
+              </select>
+            </div>
+
+
+            <!-- =========================
+                 STUDENT FINANCIAL SUPPORT
+            ========================== -->
+
+            <div class="student-support-section">
+
+              <h2>Financial support details</h2>
+
+              <p class="step-hint">
+                Provide information about the financial support available
+                for your education and loan repayment.
+              </p>
+
+              <div class="field">
+                <label for="student_support_source">
+                  Primary source of financial support
+                </label>
+
+                <select id="student_support_source">
+                  <option value="">Select support source</option>
+                  <option value="Parents">Parents</option>
+                  <option value="Guardian">Guardian</option>
+                  <option value="Scholarship">Scholarship</option>
+                  <option value="Self Funded">Self Funded</option>
+                  <option value="Part Time Employment">Part-time Employment</option>
+                  <option value="Education Loan">Education Loan</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+
+              <div class="field">
+                <label for="student_guardian_relationship">
+                  Parent / Guardian relationship
+                </label>
+
+                <select id="student_guardian_relationship">
+                  <option value="">Select relationship</option>
+                  <option value="Father">Father</option>
+                  <option value="Mother">Mother</option>
+                  <option value="Legal Guardian">Legal Guardian</option>
+                  <option value="Other Relative">Other Relative</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+
+              <div class="field">
+                <label for="student_guardian_occupation">
+                  Parent / Guardian occupation
+                </label>
+
+                <select id="student_guardian_occupation">
+                  <option value="">Select occupation</option>
+                  <option value="Salaried Employee">Salaried Employee</option>
+                  <option value="Business Owner">Business Owner</option>
+                  <option value="Self Employed">Self Employed</option>
+                  <option value="Farmer">Farmer</option>
+                  <option value="Government Employee">Government Employee</option>
+                  <option value="Private Employee">Private Employee</option>
+                  <option value="Professional">Professional</option>
+                  <option value="Retired">Retired</option>
+                  <option value="Not Employed">Not Employed</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+
+              <div class="field">
+                <label for="student_guardian_monthly_income">
+                  Parent / Guardian monthly income (₹)
+                </label>
+
+                <input
+                  type="number"
+                  id="student_guardian_monthly_income"
+                  min="0"
+                  step="0.01"
+                  placeholder="Enter monthly income"
+                />
+
+                <span class="hint">
+                  Enter 0 if there is no applicable guardian income.
+                </span>
+              </div>
+
+              <div class="field">
+                <label for="student_scholarship_amount">
+                  Monthly scholarship / financial aid amount (₹)
+                </label>
+
+                <input
+                  type="number"
+                  id="student_scholarship_amount"
+                  min="0"
+                  step="0.01"
+                  placeholder="Enter scholarship amount"
+                />
+              </div>
+
+              <div class="field">
+                <label for="student_co_applicant_available">
+                  Is a co-applicant available?
+                </label>
+
+                <select id="student_co_applicant_available">
+                  <option value="">Select</option>
+                  <option value="true">Yes</option>
+                  <option value="false">No</option>
+                </select>
+              </div>
+
+              <div class="field">
+                <label for="student_co_applicant_relationship">
+                  Co-applicant relationship
+                </label>
+
+                <select id="student_co_applicant_relationship">
+                  <option value="">Select relationship</option>
+                  <option value="Father">Father</option>
+                  <option value="Mother">Mother</option>
+                  <option value="Guardian">Guardian</option>
+                  <option value="Spouse">Spouse</option>
+                  <option value="Sibling">Sibling</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+
+              <p class="hint">
+                Financial information should be accurate and supported by
+                appropriate documents wherever required.
+              </p>
+
+            </div>
+
+          </div>
+
+
+          <!-- =========================
+               STARTUP DETAILS
+          ========================== -->
+
+          <div class="wizard-page" data-page="startup" hidden>
+
+            <h2>Startup details</h2>
+
+            <p class="step-hint">
+              Tell us about your startup and funding requirements.
+            </p>
+
+            <div class="field">
+              <label for="startup_name">Startup / Business name</label>
+
+              <input
+                type="text"
+                id="startup_name"
+                required
+              />
+            </div>
+
+            <div class="field">
+              <label for="startup_business_stage">Business stage</label>
+
+              <select id="startup_business_stage" required>
+                <option value="">Select</option>
+                <option>Idea Stage</option>
+                <option>Early Stage</option>
+                <option>Growth Stage</option>
+                <option>Established Business</option>
+              </select>
+            </div>
+
+            <div class="field-row">
+
+              <div class="field">
+                <label for="startup_business_age_years">
+                  Business age (years)
+                </label>
+
+                <input
+                  type="number"
+                  id="startup_business_age_years"
+                  min="0"
+                  step="0.5"
+                  required
+                />
+              </div>
+
+              <div class="field">
+                <label for="startup_annual_revenue">
+                  Annual revenue (₹)
+                </label>
+
+                <input
+                  type="number"
+                  id="startup_annual_revenue"
+                  min="0"
+                  required
+                />
+              </div>
+
+            </div>
+
+            <div class="field-row">
+
+              <div class="field">
+                <label for="startup_funding_required">
+                  Funding required (₹)
+                </label>
+
+                <input
+                  type="number"
+                  id="startup_funding_required"
+                  min="1"
+                  required
+                />
+              </div>
+
+              <div class="field">
+                <label for="startup_existing_funding">
+                  Existing funding (₹)
+                </label>
+
+                <input
+                  type="number"
+                  id="startup_existing_funding"
+                  min="0"
+                  value="0"
+                />
+              </div>
+
+            </div>
+
+          </div>
+
+
+          <!-- =========================
+               INVESTOR DETAILS
+          ========================== -->
+
+          <div class="wizard-page" data-page="investor" hidden>
+
+            <h2>Investor details</h2>
+
+            <p class="step-hint">
+              Provide information about your investment experience and portfolio.
+            </p>
+
+            <div class="field">
+              <label for="investor_investment_experience">
+                Investment experience
+              </label>
+
+              <select id="investor_investment_experience" required>
+                <option value="">Select</option>
+                <option>Less than 1 year</option>
+                <option>1 - 3 years</option>
+                <option>3 - 5 years</option>
+                <option>More than 5 years</option>
+              </select>
+            </div>
+
+            <div class="field-row">
+
+              <div class="field">
+                <label for="investor_annual_investment_income">
+                  Annual investment income (₹)
+                </label>
+
+                <input
+                  type="number"
+                  id="investor_annual_investment_income"
+                  min="0"
+                  required
+                />
+              </div>
+
+              <div class="field">
+                <label for="investor_investment_portfolio_value">
+                  Investment portfolio value (₹)
+                </label>
+
+                <input
+                  type="number"
+                  id="investor_investment_portfolio_value"
+                  min="0"
+                  required
+                />
+              </div>
+
+            </div>
+
+            <div class="field">
+              <label for="investor_investment_purpose">
+                Investment purpose
+              </label>
+
+              <select id="investor_investment_purpose" required>
+                <option value="">Select</option>
+                <option>Business Investment</option>
+                <option>Property Investment</option>
+                <option>Market Investment</option>
+                <option>Portfolio Expansion</option>
+                <option>Other</option>
+              </select>
+            </div>
+
+          </div>
+
+
+          <!-- =========================
+               INDIVIDUAL DETAILS
+          ========================== -->
+
+          <div class="wizard-page" data-page="individual" hidden>
+
+            <h2>Individual details</h2>
+
+            <p class="step-hint">
+              Tell us about your occupation and residential status.
+            </p>
+
+            <div class="field">
+              <label for="occupation">Occupation</label>
+
+              <select id="occupation" required>
+                <option value="">Select</option>
+                <option>Salaried Employee</option>
+                <option>Self-Employed</option>
+                <option>Business Owner</option>
+                <option>Freelancer</option>
+                <option>Professional</option>
+                <option>Other</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label for="residential_status">Residential status</label>
+
+              <select id="residential_status" required>
+                <option value="">Select</option>
+                <option>Owned</option>
+                <option>Rented</option>
+                <option>Family Owned</option>
+                <option>Other</option>
+              </select>
+            </div>
+
+          </div>
+
+
+          <!-- =========================
+               EMPLOYMENT & INCOME
+          ========================== -->
+
+          <div class="wizard-page" data-page="employment" hidden>
+
+            <h2>Employment &amp; income</h2>
+
+            <p class="step-hint">
+              Your earning situation drives most of the affordability math.
+            </p>
+
+            <div class="field-row">
+
+              <div class="field">
+                <label for="employment_type">Employment type</label>
+
+                <select id="employment_type" required>
+                  <option value="">Select</option>
+                  <option>Salaried</option>
+                  <option>Self-Employed</option>
+                  <option>Business Owner</option>
+                  <option>Contract</option>
+                  <option>Freelancer</option>
+                </select>
+              </div>
+
+              <div class="field">
+                <label for="employment_years">Years in current work</label>
+
+                <input
+                  type="number"
+                  id="employment_years"
+                  min="0"
+                  step="0.5"
+                  required
+                />
+              </div>
+
+            </div>
+
+            <div class="field-row">
+
+              <div class="field">
+                <label for="monthly_income">Monthly income (₹)</label>
+
+                <input
+                  type="number"
+                  id="monthly_income"
+                  min="1"
+                  required
+                />
+              </div>
+
+              <div class="field">
+                <label for="other_monthly_income">
+                  Co-applicant / other income (₹)
+                </label>
+
+                <input
+                  type="number"
+                  id="other_monthly_income"
+                  min="0"
+                  value="0"
+                />
+
+                <span class="hint">
+                  Leave as 0 if not applicable.
+                </span>
+              </div>
+
+            </div>
+
+          </div>
+
+
+          <!-- =========================
+               CREDIT PROFILE
+          ========================== -->
+
+          <div class="wizard-page" data-page="credit" hidden>
+
+            <h2>Credit profile</h2>
+
+            <p class="step-hint">
+              This mirrors what a credit bureau report would show.
+            </p>
+
+            <div class="field-row">
+
+              <div class="field">
+                <label for="credit_score">Credit score</label>
+
+                <input
+                  type="number"
+                  id="credit_score"
+                  min="300"
+                  max="900"
+                  required
+                />
+              </div>
+
+              <div class="field">
+                <label for="credit_history_years">
+                  Credit history (years)
+                </label>
+
+                <input
+                  type="number"
+                  id="credit_history_years"
+                  min="0"
+                  step="0.5"
+                  required
+                />
+              </div>
+
+            </div>
+
+            <div class="field-row">
+
+              <div class="field">
+                <label for="credit_accounts">Open credit accounts</label>
+
+                <input
+                  type="number"
+                  id="credit_accounts"
+                  min="0"
+                  value="1"
+                />
+              </div>
+
+              <div class="field">
+                <label for="credit_utilization_percent">
+                  Credit utilization (%)
+                </label>
+
+                <input
+                  type="number"
+                  id="credit_utilization_percent"
+                  min="0"
+                  max="100"
+                  value="20"
+                />
+              </div>
+
+            </div>
+
+            <div class="field-row">
+
+              <div class="field">
+                <label for="previous_loans">Previous loans taken</label>
+
+                <input
+                  type="number"
+                  id="previous_loans"
+                  min="0"
+                  value="0"
+                />
+              </div>
+
+              <div class="field">
+                <label for="late_payments">
+                  Late payments (last 2 yrs)
+                </label>
+
+                <input
+                  type="number"
+                  id="late_payments"
+                  min="0"
+                  value="0"
+                />
+              </div>
+
+            </div>
+
+            <div class="field">
+              <label for="previous_defaults">Previous defaults</label>
+
+              <input
+                type="number"
+                id="previous_defaults"
+                min="0"
+                value="0"
+                style="max-width:200px"
+              />
+            </div>
+
+          </div>
+
+
+          <!-- =========================
+               LOAN DETAILS
+          ========================== -->
+
+          <div class="wizard-page" data-page="loan" hidden>
+
+            <h2>Loan details</h2>
+
+            <p class="step-hint">
+              What you're actually asking for.
+            </p>
+
+            <div class="field-row">
+
+              <div class="field">
+                <label for="loan_purpose">Purpose of loan</label>
+
+                <select id="loan_purpose" required>
+                  <option value="">Select</option>
+                  <option>Personal</option>
+                  <option>Home</option>
+                  <option>Vehicle</option>
+                  <option>Business</option>
+                  <option>Education</option>
+                  <option>Medical</option>
+                </select>
+              </div>
+
+              <div class="field">
+                <label for="loan_amount">Loan amount (₹)</label>
+
+                <input
+                  type="number"
+                  id="loan_amount"
+                  min="1"
+                  required
+                />
+              </div>
+
+            </div>
+
+            <div class="field-row">
+
+              <div class="field">
+                <label for="loan_tenure_months">
+                  Loan term (months)
+                </label>
+
+                <input
+                  type="number"
+                  id="loan_tenure_months"
+                  min="3"
+                  max="360"
+                  required
+                />
+              </div>
+
+              <div class="field">
+                <label for="existing_emi">
+                  Existing monthly EMIs (₹)
+                </label>
+
+                <input
+                  type="number"
+                  id="existing_emi"
+                  min="0"
+                  value="0"
+                />
+              </div>
+
+            </div>
+
+          </div>
+
+
+          <!-- =========================
+               ASSETS & LIABILITIES
+          ========================== -->
+
+          <div class="wizard-page" data-page="assets" hidden>
+
+            <h2>Assets &amp; liabilities</h2>
+
+            <p class="step-hint">
+              Optional, but a fuller financial picture gives a more accurate score.
+            </p>
+
+            <div class="field-row">
+
+              <div class="field">
+                <label for="assets">Total assets (₹)</label>
+
+                <input
+                  type="number"
+                  id="assets"
+                  min="0"
+                  value="0"
+                />
+              </div>
+
+              <div class="field">
+                <label for="liabilities">Total liabilities (₹)</label>
+
+                <input
+                  type="number"
+                  id="liabilities"
+                  min="0"
+                  value="0"
+                />
+              </div>
+
+            </div>
+
+            <div class="field">
+              <label for="bank_balance">Current bank balance (₹)</label>
+
+              <input
+                type="number"
+                id="bank_balance"
+                min="0"
+                value="0"
+                style="max-width:300px"
+              />
+            </div>
+
+          </div>
+
+
+          <!-- =========================
+               ACTION BUTTONS
+          ========================== -->
+
+          <div class="wizard-actions">
+
+            <button
+              type="button"
+              class="btn btn-ghost"
+              id="backBtn"
+            >
+              Back
+            </button>
+
+            <button
+              type="button"
+              class="btn btn-primary"
+              id="nextBtn"
+            >
+              Continue
+            </button>
+
+          </div>
+
+        </form>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</main>
+
+<script src="/js/api.js"></script>
+<script src="/js/shell.js"></script>
+<script src="/js/wizard.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,122 @@
+{
+  "model_name": "Random Forest",
+  "best_params": {
+    "model__max_depth": 8,
+    "model__n_estimators": 400
+  },
+  "accuracy": 0.8,
+  "f1": 0.5454545454545454,
+  "roc_auc": 0.8285300697460192,
+  "confusion_matrix": [
+    [
+      136,
+      13
+    ],
+    [
+      27,
+      24
+    ]
+  ],
+  "comparison": {
+    "Logistic Regression": {
+      "accuracy": 0.765,
+      "f1": 0.6178861788617886,
+      "roc_auc": 0.799315699434136
+    },
+    "Decision Tree": {
+      "accuracy": 0.695,
+      "f1": 0.5547445255474452,
+      "roc_auc": 0.7279905250690881
+    },
+    "Random Forest": {
+      "accuracy": 0.805,
+      "f1": 0.5185185185185185,
+      "roc_auc": 0.82918805105935
+    },
+    "XGBoost": {
+      "accuracy": 0.8,
+      "f1": 0.574468085106383,
+      "roc_auc": 0.8036583761021187
+    }
+  },
+  "n_train": 800,
+  "n_test": 200,
+  "features": [
+    "Age",
+    "Employment_Years",
+    "Monthly_Income",
+    "Other_Monthly_Income",
+    "Credit_Score",
+    "Credit_History_Years",
+    "Credit_Accounts",
+    "Credit_Utilization_Percent",
+    "Previous_Loans",
+    "Late_Payments",
+    "Previous_Defaults",
+    "Loan_Amount",
+    "Loan_Tenure_Months",
+    "Interest_Rate_Percent",
+    "Existing_EMI",
+    "New_EMI",
+    "Total_Monthly_Obligation",
+    "DTI_Percent",
+    "EMI_to_Income_Percent",
+    "Assets",
+    "Liabilities",
+    "Net_Worth",
+    "Bank_Balance",
+    "Income_Stability_Score",
+    "Repayment_Consistency_Score",
+    "Total_Income",
+    "Loan_to_Income_Ratio",
+    "NetWorth_to_Loan_Ratio",
+    "Payment_Burden",
+    "Loan_Tenure_Years",
+    "Gender",
+    "Marital_Status",
+    "Education",
+    "Employment_Type",
+    "Loan_Purpose",
+    "Credit_Utilization_Category"
+  ],
+  "numeric_features": [
+    "Age",
+    "Employment_Years",
+    "Monthly_Income",
+    "Other_Monthly_Income",
+    "Credit_Score",
+    "Credit_History_Years",
+    "Credit_Accounts",
+    "Credit_Utilization_Percent",
+    "Previous_Loans",
+    "Late_Payments",
+    "Previous_Defaults",
+    "Loan_Amount",
+    "Loan_Tenure_Months",
+    "Interest_Rate_Percent",
+    "Existing_EMI",
+    "New_EMI",
+    "Total_Monthly_Obligation",
+    "DTI_Percent",
+    "EMI_to_Income_Percent",
+    "Assets",
+    "Liabilities",
+    "Net_Worth",
+    "Bank_Balance",
+    "Income_Stability_Score",
+    "Repayment_Consistency_Score",
+    "Total_Income",
+    "Loan_to_Income_Ratio",
+    "NetWorth_to_Loan_Ratio",
+    "Payment_Burden",
+    "Loan_Tenure_Years"
+  ],
+  "categorical_features": [
+    "Gender",
+    "Marital_Status",
+    "Education",
+    "Employment_Type",
+    "Loan_Purpose",
+    "Credit_Utilization_Category"
+  ]
+}

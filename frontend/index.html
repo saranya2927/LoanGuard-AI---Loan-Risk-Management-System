@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>LoanGuard AI — Loan risk scoring that shows its work</title>
+<meta name="description" content="LoanGuard AI scores loan applications in real time using a trained ML model, with a clear risk gauge for applicants and a full portfolio dashboard for underwriters." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/tokens.css" />
+<link rel="stylesheet" href="/css/base.css" />
+<link rel="stylesheet" href="/css/marketing.css" />
+</head>
+<body>
+
+<header>
+  <div class="pub-topbar">
+    <a href="/index.html" class="pub-logo">
+      <span class="mark">LG</span>
+      <span class="word">LoanGuard AI</span>
+    </a>
+    <nav class="pub-nav">
+      <div class="pub-nav-links">
+        <a href="#how-it-works">How it works</a>
+        <a href="#features">Features</a>
+        <a href="#for-teams">For institutions</a>
+      </div>
+      <div class="pub-nav-actions">
+        <a href="/login.html" class="btn btn-ghost btn-sm">Log in</a>
+        <a href="/register.html" class="btn btn-dark btn-sm">Get started</a>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<section class="hero">
+  <div>
+    <h1>Know the risk before the loan does.</h1>
+    <p class="lede">LoanGuard AI reads an applicant's income, credit history, and repayment behavior and turns it into one clear number — in real time, with the reasoning attached. Built for applicants who want a straight answer, and underwriters who want the full portfolio view.</p>
+    <div class="hero-cta">
+      <a href="/register.html" class="btn btn-primary">Check your loan risk →</a>
+      <a href="#how-it-works" class="secondary-link">See how scoring works</a>
+    </div>
+    <div class="trust-strip">
+      <div class="stat"><div class="n mono">82.9%</div><div class="l">Model ROC-AUC</div></div>
+      <div class="stat"><div class="n mono">36</div><div class="l">Signals per application</div></div>
+      <div class="stat"><div class="n mono">4</div><div class="l">Algorithms benchmarked</div></div>
+    </div>
+  </div>
+
+  <div class="hero-demo">
+    <div class="demo-label">Live model, sample applicants</div>
+    <div class="demo-title">Try the risk gauge</div>
+    <div id="heroGauge" style="display:flex;justify-content:center;"></div>
+    <div class="demo-profiles" id="demoProfiles"></div>
+    <div class="demo-readout">
+      <div class="item"><div class="k">Risk level</div><div class="v" id="demoRiskLevel">—</div></div>
+      <div class="item"><div class="k">Default probability</div><div class="v" id="demoProb">—</div></div>
+      <div class="item"><div class="k">Suggested decision</div><div class="v" id="demoDecision">—</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="how-it-works">
+  <div class="section-inner">
+    <div class="section-head">
+      <h2>From application to decision in one request</h2>
+      <p>The same pipeline your team designed — cleaned data, engineered features, a trained classifier — runs live on every submission.</p>
+    </div>
+    <div class="steps">
+      <div class="step">
+        <div class="num">01</div>
+        <h4>Applicant fills the form</h4>
+        <p>Personal, employment, credit, and loan details — the fields a lender would actually ask for.</p>
+      </div>
+      <div class="step">
+        <div class="num">02</div>
+        <h4>Features are engineered</h4>
+        <p>DTI, EMI-to-income, loan-to-income, net worth ratios and behavioral scores are computed server-side.</p>
+      </div>
+      <div class="step">
+        <div class="num">03</div>
+        <h4>Model scores the risk</h4>
+        <p>A trained classifier outputs a default probability, translated into Low, Medium, or High risk.</p>
+      </div>
+      <div class="step">
+        <div class="num">04</div>
+        <h4>Decision + explanation</h4>
+        <p>Applicants get a clear result. Officers get the same case in a searchable portfolio dashboard.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section alt" id="features">
+  <div class="section-inner">
+    <div class="section-head">
+      <h2>Everything an underwriting team actually uses</h2>
+      <p>Not a toy demo — a working risk pipeline with real accounts, a real database, and a real model.</p>
+    </div>
+    <div class="features-grid">
+      <div class="feature">
+        <div class="icon"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg></div>
+        <h4>Real-time scoring</h4>
+        <p>Every application is scored the moment it's submitted, no batch jobs or manual review queue to wait on.</p>
+      </div>
+      <div class="feature">
+        <div class="icon"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 19V9M12 19V5M20 19v-7"/></svg></div>
+        <h4>Portfolio analytics</h4>
+        <p>Approval rate, risk mix, and volume trends across every application your institution has scored.</p>
+      </div>
+      <div class="feature">
+        <div class="icon"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg></div>
+        <h4>Explainable results</h4>
+        <p>Every score comes with the factors that moved it — DTI, credit utilization, repayment history.</p>
+      </div>
+      <div class="feature">
+        <div class="icon"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M4 10h16"/></svg></div>
+        <h4>Role-based access</h4>
+        <p>Applicants see their own cases. Loan officers and admins see the full portfolio and history.</p>
+      </div>
+      <div class="feature">
+        <div class="icon"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3v4M12 17v4M3 12h4M17 12h4"/><circle cx="12" cy="12" r="5"/></svg></div>
+        <h4>Searchable history</h4>
+        <p>Filter every scored application by risk level, decision, or applicant name.</p>
+      </div>
+      <div class="feature">
+        <div class="icon"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 15v4M8 19h8"/><rect x="5" y="3" width="14" height="12" rx="2"/></svg></div>
+        <h4>Exportable reports</h4>
+        <p>Download any application's full underwriting record as a CSV for offline review or audit.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="for-teams">
+  <div class="section-inner">
+    <div class="section-head">
+      <h2>Built for both sides of the desk</h2>
+      <p>One system, two very different jobs to do.</p>
+    </div>
+    <div class="persona-split">
+      <div class="persona">
+        <h3>If you're applying</h3>
+        <p>Fill in your details once and get an instant, honest read on where you stand before a lender sees the application.</p>
+        <ul>
+          <li>Guided, five-step application form</li>
+          <li>Your risk score, explained in plain terms</li>
+          <li>A running history of everything you've submitted</li>
+        </ul>
+        <a href="/register.html" class="btn btn-primary btn-sm">Create an applicant account</a>
+      </div>
+      <div class="persona dark">
+        <h3>If you're underwriting</h3>
+        <p>See every application that's come through, sorted, scored, and ready to review — not buried in a spreadsheet.</p>
+        <ul>
+          <li>Live portfolio dashboard with risk distribution</li>
+          <li>Full searchable application history</li>
+          <li>Case-level detail with the model's reasoning</li>
+        </ul>
+        <a href="/login.html" class="btn btn-primary btn-sm">Log in as officer / admin</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section alt">
+  <div class="section-inner">
+    <div class="section-head">
+      <h2>The model, honestly</h2>
+      <p>Logistic Regression, Decision Tree, Random Forest, and XGBoost were trained and compared on 1,000 applicant records; the best performer was tuned and shipped.</p>
+    </div>
+    <div class="metric-strip">
+      <div class="m"><div class="v">Random Forest</div><div class="l">Selected model</div></div>
+      <div class="m"><div class="v">82.9%</div><div class="l">ROC-AUC (test set)</div></div>
+      <div class="m"><div class="v">80.0%</div><div class="l">Accuracy (test set)</div></div>
+      <div class="m"><div class="v">36</div><div class="l">Input features</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="section-inner">
+    <div class="cta-banner">
+      <h2>Ready to see your number?</h2>
+      <p>It takes about two minutes, and the score is yours to see either way.</p>
+      <a href="/register.html" class="btn btn-primary">Check your loan risk →</a>
+    </div>
+  </div>
+</section>
+
+<footer class="pub-footer">
+  <div class="row">
+    <span class="word">LoanGuard AI</span>
+    <div class="links">
+      <a href="#how-it-works">How it works</a>
+      <a href="#features">Features</a>
+      <a href="/login.html">Log in</a>
+    </div>
+    <p>A loan risk assessment project — for demonstration purposes.</p>
+  </div>
+</footer>
+
+<script src="/js/gauge.js"></script>
+<script>
+  const PROFILES = [
+    {
+      key: "strong",
+      label: "Strong applicant",
+      payload: { full_name: "Demo", age: 34, gender: "Female", marital_status: "Married", education: "Master",
+        employment_type: "Salaried", employment_years: 8, monthly_income: 90000, other_monthly_income: 10000,
+        credit_score: 780, credit_history_years: 9, credit_accounts: 4, credit_utilization_percent: 15,
+        previous_loans: 2, late_payments: 0, previous_defaults: 0,
+        loan_purpose: "Home", loan_amount: 2500000, loan_tenure_months: 180, existing_emi: 5000,
+        assets: 1500000, liabilities: 200000, bank_balance: 300000 }
+    },
+    {
+      key: "mixed",
+      label: "Mixed history",
+      payload: { full_name: "Demo", age: 41, gender: "Male", marital_status: "Married", education: "Bachelor",
+        employment_type: "Self-Employed", employment_years: 6, monthly_income: 45000, other_monthly_income: 0,
+        credit_score: 660, credit_history_years: 5, credit_accounts: 3, credit_utilization_percent: 55,
+        previous_loans: 3, late_payments: 2, previous_defaults: 0,
+        loan_purpose: "Business", loan_amount: 800000, loan_tenure_months: 60, existing_emi: 9000,
+        assets: 400000, liabilities: 250000, bank_balance: 40000 }
+    },
+    {
+      key: "thin",
+      label: "New to credit",
+      payload: { full_name: "Demo", age: 25, gender: "Male", marital_status: "Single", education: "High School",
+        employment_type: "Freelancer", employment_years: 1.5, monthly_income: 22000, other_monthly_income: 0,
+        credit_score: 570, credit_history_years: 1, credit_accounts: 1, credit_utilization_percent: 85,
+        previous_loans: 1, late_payments: 4, previous_defaults: 1,
+        loan_purpose: "Personal", loan_amount: 300000, loan_tenure_months: 36, existing_emi: 3000,
+        assets: 20000, liabilities: 60000, bank_balance: 5000 }
+    },
+  ];
+
+  const profileBar = document.getElementById("demoProfiles");
+  profileBar.innerHTML = PROFILES.map(
+    (p, i) => `<button class="demo-profile-btn${i === 0 ? " active" : ""}" data-key="${p.key}">${p.label}</button>`
+  ).join("");
+
+  async function runDemo(profile) {
+    document.querySelectorAll(".demo-profile-btn").forEach((b) =>
+      b.classList.toggle("active", b.dataset.key === profile.key)
+    );
+    try {
+      const res = await fetch("/api/demo/predict", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(profile.payload),
+      });
+      const data = await res.json();
+      renderGauge(document.getElementById("heroGauge"), data.default_probability_percent);
+      document.getElementById("demoRiskLevel").textContent = data.risk_level + " Risk";
+      document.getElementById("demoProb").textContent = data.default_probability_percent.toFixed(1) + "%";
+      document.getElementById("demoDecision").textContent = data.recommended_decision;
+    } catch (e) {
+      document.getElementById("heroGauge").innerHTML = "<p style='color:#9aa2c0;font-size:13px;'>Demo unavailable right now.</p>";
+    }
+  }
+
+  profileBar.addEventListener("click", (e) => {
+    const btn = e.target.closest(".demo-profile-btn");
+    if (!btn) return;
+    const profile = PROFILES.find((p) => p.key === btn.dataset.key);
+    runDemo(profile);
+  });
+
+  runDemo(PROFILES[0]);
+</script>
+</body>
+</html>

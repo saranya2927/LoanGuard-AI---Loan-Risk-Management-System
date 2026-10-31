@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Dashboard — LoanGuard AI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/tokens.css" />
+<link rel="stylesheet" href="/css/base.css" />
+<link rel="stylesheet" href="/css/app.css" />
+</head>
+<body>
+
+<main class="app-main">
+  <div class="app-topbar">
+    <div>
+      <h1>Dashboard</h1>
+      <div class="sub" id="welcomeMsg">Here's an overview of your loan applications</div>
+    </div>
+    <a href="/apply.html" class="btn btn-primary btn-sm">+ New application</a>
+  </div>
+
+  <div class="app-content" id="content">
+    <div id="loadingState">
+      <div class="skel" style="height:100px;border-radius:12px;margin-bottom:20px;"></div>
+      <div class="skel" style="height:260px;border-radius:12px;"></div>
+    </div>
+  </div>
+</main>
+
+<script src="/js/api.js"></script>
+<script src="/js/shell.js"></script>
+<script src="/js/gauge.js"></script>
+<script>
+  async function init() {
+    const user = await requireAuth(["officer", "admin"]);
+    if (!user) return;
+    mountAppShell(user, "dashboard");
+    document.getElementById("welcomeMsg").textContent = `Welcome back, ${user.full_name.split(" ")[0]} — here's the portfolio right now.`;
+
+    const content = document.getElementById("content");
+    content.innerHTML = `
+      <div class="kpi-row">
+        <div class="kpi hero"><div class="label">Total applications</div><div class="value mono" id="kpiTotal">—</div></div>
+        <div class="kpi"><div class="label">Approved</div><div class="value mono" id="kpiApproved">—</div></div>
+        <div class="kpi"><div class="label">Approval rate</div><div class="value mono" id="kpiRate">—</div></div>
+        <div class="kpi"><div class="label">High risk</div><div class="value mono" id="kpiHighRisk">—</div></div>
+      </div>
+      <div class="panel-row">
+        <div class="card">
+          <div class="panel-title"><h3>Applications over time</h3><span class="meta">Last 6 months</span></div>
+          <div id="lineChart"></div>
+        </div>
+        <div class="card">
+          <div class="panel-title"><h3>Risk distribution</h3><span class="meta">All time</span></div>
+          <div id="donutChart"></div>
+        </div>
+      </div>
+      <div class="card card-flush">
+        <div style="padding:24px 24px 0;">
+          <div class="panel-title"><h3>Recently scored</h3><a href="/history.html" class="meta" style="color:var(--indigo);font-weight:600;">View all →</a></div>
+        </div>
+        <table class="data-table" id="recentTable">
+          <thead><tr><th>Applicant</th><th>Loan amount</th><th>Risk</th><th>Decision</th><th>Date</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    `;
+
+    let summary;
+    try {
+      summary = await API.dashboardSummary();
+    } catch (e) {
+      content.innerHTML = `<div class="empty-state"><h3>Couldn't load the dashboard</h3><p>${e.message}</p></div>`;
+      return;
+    }
+
+    document.getElementById("kpiTotal").textContent = summary.total_applications.toLocaleString();
+    document.getElementById("kpiApproved").textContent = summary.approved_count.toLocaleString();
+    document.getElementById("kpiRate").textContent = summary.approval_rate + "%";
+    document.getElementById("kpiHighRisk").textContent = summary.high_risk_count.toLocaleString();
+
+    renderLineChart(
+      document.getElementById("lineChart"),
+      summary.applications_over_time.map((p) => ({ label: p.month.slice(5), value: p.count }))
+    );
+
+    renderDonut(document.getElementById("donutChart"), [
+      { label: "Low risk", value: summary.risk_distribution.Low, color: "var(--risk-low)" },
+      { label: "Medium risk", value: summary.risk_distribution.Medium, color: "var(--risk-medium)" },
+      { label: "High risk", value: summary.risk_distribution.High, color: "var(--risk-high)" },
+    ]);
+
+    const tbody = document.querySelector("#recentTable tbody");
+    if (!summary.recent_applications.length) {
+      tbody.innerHTML = `<tr><td colspan="5"><div class="empty-state"><p>No applications yet.</p></div></td></tr>`;
+    } else {
+      tbody.innerHTML = summary.recent_applications
+        .map(
+          (a) => `
+        <tr onclick="window.location.href='/history.html?open=${a.id}'">
+          <td class="name-cell">${a.full_name}</td>
+          <td class="muted-cell mono">${fmtCurrency(a.loan_amount)}</td>
+          <td><span class="badge ${riskBadgeClass(a.risk_level)}">${a.risk_level}</span></td>
+          <td><span class="badge ${decisionBadgeClass(a.recommended_decision)}">${a.recommended_decision}</span></td>
+          <td class="muted-cell">${fmtDate(a.created_at)}</td>
+        </tr>`
+        )
+        .join("");
+    }
+  }
+
+  init();
+</script>
+</body>
+</html>

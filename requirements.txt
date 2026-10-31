@@ -1,0 +1,11 @@
+fastapi==0.141.1
+uvicorn==0.53.0
+sqlalchemy==2.0.52
+pydantic[email]
+itsdangerous
+joblib
+pandas
+numpy
+scikit-learn
+xgboost
+python-multipart
